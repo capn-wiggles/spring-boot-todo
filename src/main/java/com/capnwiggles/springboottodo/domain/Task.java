@@ -10,15 +10,31 @@ public class Task {
     private final String name;
     private Boolean done;
 
-    public Task(UUID todoID, String name) {
-        this.todoID = todoID;
+    public Task(UUID taskId, UUID todoId, String name) {
+        this.todoID = todoId;
         this.name = name;
         this.done = false;
-        this.taskID = UUID.randomUUID();
+        this.taskID = taskId;
     }
 
     public void toggleDone() {
         this.done = !this.done;
+    }
+
+    public UUID getTaskID() {
+        return taskID;
+    }
+
+    public UUID getTodoID() {
+        return todoID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Boolean getDone() {
+        return done;
     }
 
     @Override
