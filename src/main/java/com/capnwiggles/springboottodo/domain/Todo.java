@@ -31,10 +31,12 @@ public class Todo {
         this.todoID = UUID.randomUUID();
         this.name = name;
         this.description = description;
+        this.tasks = new ArrayList<>();
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
+    public void addTask(String taskName) {
+        UUID taskId = UUID.randomUUID();
+        tasks.add(new Task(taskId, this.getTodoID(), taskName));
     }
 
     public UUID getTodoID() {
