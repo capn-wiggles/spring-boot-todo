@@ -1,4 +1,4 @@
-package com.capnwiggles.springboottodo.controller;
+package com.capnwiggles.springboottodo.controller.api;
 
 import com.capnwiggles.springboottodo.domain.Task;
 import com.capnwiggles.springboottodo.domain.Todo;
