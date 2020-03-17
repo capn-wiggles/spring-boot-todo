@@ -1,14 +1,12 @@
 package com.capnwiggles.springboottodo.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Component
 public class Todo {
 
     private final UUID todoID;
@@ -43,9 +41,13 @@ public class Todo {
         return todoID;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
-    public String getDescription() { return description; }
+    public String getDescription() {
+        return description;
+    }
 
     public List<Task> getTasks() {
         return tasks;

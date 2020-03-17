@@ -15,7 +15,7 @@ public class TodoService {
     private final TodoDao todoDao;
 
     @Autowired
-    public TodoService(@Qualifier("InMemoryTodoDao") TodoDao todoDao) {
+    public TodoService(@Qualifier("inMemoryTodoDao") TodoDao todoDao) {
         this.todoDao = todoDao;
     }
 

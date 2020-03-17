@@ -4,16 +4,17 @@ import java.util.UUID;
 
 public class Task {
 
-    private UUID taskID; // primary
-    private UUID todoID; // foreign
+    private final UUID taskID; // primary
+    private final UUID todoID; // foreign
 
-    private String name;
+    private final String name;
     private Boolean done;
 
     public Task(UUID todoID, String name) {
         this.todoID = todoID;
         this.name = name;
         this.done = false;
+        this.taskID = UUID.randomUUID();
     }
 
     public void toggleDone() {

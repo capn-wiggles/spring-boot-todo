@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Repository("InMemoryTodoDao")
+@Repository("inMemoryTodoDao")
 public class InMemoryTodoDao implements TodoDao {
 
-    List<Todo> todos;
+    private List<Todo> todos;
 
     public InMemoryTodoDao() {
         this.todos = new ArrayList<>();
