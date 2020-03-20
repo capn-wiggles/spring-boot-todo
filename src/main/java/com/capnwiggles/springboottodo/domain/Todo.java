@@ -2,20 +2,29 @@ package com.capnwiggles.springboottodo.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
 public class Todo {
 
+    @Id
     private final UUID todoID;
 
     @NotBlank
+    @Column(name = "todo_name")
     private final String name;
 
+    @Column(name = "todo_description")
     private final String description;
 
+    @OneToMany
     List<Task> tasks;
 
     public Todo(@JsonProperty("id") UUID todoID,
