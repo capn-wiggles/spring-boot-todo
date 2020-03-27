@@ -1,72 +1,44 @@
 package com.capnwiggles.springboottodo.domain;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 @Entity
+@Table(name = "todos")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Todo {
 
     @Id
-    private final UUID todoID;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     @NotBlank
     @Column(name = "todo_name")
-    private final String name;
+    private String name;
 
     @Column(name = "todo_description")
-    private final String description;
+    private String description;
 
-    @OneToMany
-    List<Task> tasks;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "todo")
+    private List<Task> tasks;
 
-    public Todo(@JsonProperty("id") UUID todoID,
-                @JsonProperty("name") String name,
-                @JsonProperty("description") String description) {
-        this.todoID = todoID;
+    public Todo(@NotBlank String name, String description) {
         this.name = name;
         this.description = description;
-        this.tasks = new ArrayList<>();
     }
 
-    public Todo(String name, String description) {
-        this.todoID = UUID.randomUUID();
-        this.name = name;
-        this.description = description;
-        this.tasks = new ArrayList<>();
-    }
-
-    public void addTask(String taskName) {
-        UUID taskId = UUID.randomUUID();
-        tasks.add(new Task(taskId, this.getTodoID(), taskName));
-    }
-
-    public UUID getTodoID() {
-        return todoID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
+    public void addTask(Task task) {
+        tasks.add(task);
     }
 
     @Override
     public String toString() {
-        return "\n[TODO_ID] " + todoID + "\n" +
+        return "\n[TODO_ID] " + id + "\n" +
                 "[TODO_NAME] " + name + "\n" +
                 "[TODO_DESC] " + description + "\n" +
                 "[TODO_TASKS] " + tasks + "\n";
