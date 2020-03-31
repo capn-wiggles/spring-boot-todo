@@ -3,36 +3,32 @@ package com.capnwiggles.springboottodo.controller.api;
 import com.capnwiggles.springboottodo.domain.Task;
 import com.capnwiggles.springboottodo.domain.Todo;
 import com.capnwiggles.springboottodo.service.TodoService;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.UUID;
+import javax.validation.Valid;
 
-@RequestMapping("api/todo")
+import java.util.List;
+
+@RequestMapping("/api")
 @RestController
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class TodoController {
 
     private final TodoService todoService;
 
-    @Autowired
-    public TodoController(TodoService todoService) {
-        this.todoService = todoService;
-    }
-
-    @PostMapping
-    public void addTodo(@RequestBody Todo todo) {
+    @PostMapping(path = "todo")
+    public void addTodo(@RequestBody @Valid Todo todo) {
         todoService.insertTodo(todo);
     }
 
-    @PostMapping(path = "id/{id}")
-    public void addTask(@PathVariable("id") UUID todoId, @RequestBody String taskName) {
-        todoService.addTask(todoId, taskName);
-    }
-
-    @PostMapping(path = "id/{id}/tasks/{taskId}/done")
-    public void setTaskDone(@PathVariable("id") UUID todoId, @PathVariable("taskId") UUID taskId) {
-        todoService.setTaskDone(todoId, taskId);
+    @PostMapping(path = "todo/{id}")
+    public void addTask(@PathVariable("id") Long todoId, @RequestParam String task) {
+        todoService.addTask(todoId, task);
     }
 
     @GetMapping
@@ -40,18 +36,13 @@ public class TodoController {
         return todoService.findAllTodos();
     }
 
-    @GetMapping(path = "id/{id}")
-    public Todo findTodoById(@PathVariable("id") UUID todoId) {
+    @GetMapping(path = "todo/{id}")
+    public Todo findTodoById(@PathVariable("id") Long todoId) {
         return todoService.findTodoById(todoId).orElse(null);
     }
 
-    @GetMapping(path = "/id/{id}/tasks")
-    public List<Task> showAllTasks(@PathVariable("id") UUID todoId) {
+    @GetMapping(path = "todo/{id}/tasks")
+    public List<Task> showAllTasks(@PathVariable("id") Long todoId) {
         return todoService.showAllTasks(todoId);
-    }
-
-    @GetMapping(path = "/id/{id}/tasks/{taskId}")
-    public Task findTaskById(@PathVariable("id") UUID todoId, @PathVariable("taskId") UUID taskId) {
-        return todoService.findTaskById(todoId, taskId);
     }
 }

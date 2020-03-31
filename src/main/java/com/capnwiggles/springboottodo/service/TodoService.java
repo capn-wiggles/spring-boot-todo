@@ -1,42 +1,51 @@
 package com.capnwiggles.springboottodo.service;
 
-import com.capnwiggles.springboottodo.dao.TodoDao;
+import com.capnwiggles.springboottodo.dao.JpaTaskDao;
+import com.capnwiggles.springboottodo.dao.JpaTodoDao;
 import com.capnwiggles.springboottodo.domain.Task;
 import com.capnwiggles.springboottodo.domain.Todo;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TodoService {
 
-    private final TodoDao todoDao;
+    private final JpaTodoDao todoDao;
+    private final TaskService taskService;
 
     @Autowired
-    public TodoService(@Qualifier("inMemoryTodoDao") TodoDao todoDao) {
+    public TodoService(JpaTodoDao todoDao, TaskService taskService) {
         this.todoDao = todoDao;
+        this.taskService = taskService;
     }
 
     public void insertTodo(Todo todo) {
-        UUID id = UUID.randomUUID();
-        todoDao.insertTodo(id, todo);
+        todoDao.save(todo);
     }
 
     public List<Todo> findAllTodos() {
-        return todoDao.findAllTodos();
+        return todoDao.findAll();
     }
 
-    public Optional<Todo> findTodoById(UUID todoId) { return todoDao.findTodoByID(todoId); }
+    public Optional<Todo> findTodoById(Long todoId) {
+        return todoDao.findById(todoId);
+    }
 
-    public List<Task> showAllTasks(UUID todoId) { return todoDao.showAllTasks(todoId); }
+    public List<Task> showAllTasks(Long todoId) {
+        Optional<Todo> optionalTodo = todoDao.findById(todoId);
+        return optionalTodo.isPresent() ? optionalTodo.get().getTasks() : Collections.emptyList();
+    }
 
-    public boolean addTask(UUID todoId, String taskName) { return todoDao.addTask(todoId, taskName); }
-
-    public Task findTaskById(UUID todoId, UUID taskId) {return todoDao.findTaskById(todoId, taskId); }
-
-    public boolean setTaskDone(UUID todoId, UUID taskId) { return todoDao.setTaskDone(todoId, taskId); }
+    public boolean addTask(Long todoId, String taskName) {
+        Optional<Todo> optionalTodo = todoDao.findById(todoId);
+        if (optionalTodo.isPresent()) {
+            taskService.addTask(taskName, optionalTodo.get());
+            return true;
+        }
+        return false;
+    }
 }

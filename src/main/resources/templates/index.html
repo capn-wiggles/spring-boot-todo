@@ -11,6 +11,10 @@
     <div class="todo" th:each="todo : ${todos}">
         <p th:text="${todo.getName()}"></p>
         <p th:text="${todo.getDescription()}"></p>
+        <p style="font-weight: bold;">Tasks:</p>
+        <div class="tasks" th:each="task : ${todo.getTasks()}">
+            <p th:text="${task.getName()}"></p>
+        </div>
         <br>
     </div>
 </body>

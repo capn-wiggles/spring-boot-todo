@@ -1,40 +1,36 @@
 package com.capnwiggles.springboottodo.domain;
 
-import java.util.UUID;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
+import javax.persistence.*;
+
+@Entity
+@Table (name = "tasks")
+@NoArgsConstructor
+@Getter
+@Setter
 public class Task {
 
-    private final UUID taskID; // primary
-    private final UUID todoID; // foreign
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
-    private final String name;
+    @Column(name = "task_name")
+    private String name;
+
+    @Column(name = "task_done", columnDefinition = "boolean default false")
     private Boolean done;
 
-    public Task(UUID taskId, UUID todoId, String name) {
-        this.todoID = todoId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "todo_id")
+    @JsonIgnore
+    private Todo todo;
+
+    public Task(String name, Todo todo) {
         this.name = name;
+        this.todo = todo;
         this.done = false;
-        this.taskID = taskId;
-    }
-
-    public void toggleDone() {
-        this.done = !this.done;
-    }
-
-    public UUID getTaskID() {
-        return taskID;
-    }
-
-    public UUID getTodoID() {
-        return todoID;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Boolean getDone() {
-        return done;
     }
 
     @Override
